@@ -12,13 +12,21 @@ firebase.initializeApp(firebaseConfig);
 
 let database = firebase.database();
 
-$('#add-train').on('click', function () {
+$('#add-train').on('click', function() {
   event.preventDefault();
 
-  let trainName = $('#train-name-input').val().trim();
-  let trainDestination = $('#train-destination-input').val().trim();
-  let trainTime = $('#train-time-input').val().trim();
-  let Trainfrequency = $('#train-frequency-input').val().trim();
+  let trainName = $('#train-name-input')
+    .val()
+    .trim();
+  let trainDestination = $('#train-destination-input')
+    .val()
+    .trim();
+  let trainTime = $('#train-time-input')
+    .val()
+    .trim();
+  let Trainfrequency = $('#train-frequency-input')
+    .val()
+    .trim();
 
   database.ref().push({
     name: trainName,
@@ -26,4 +34,20 @@ $('#add-train').on('click', function () {
     time: trainTime,
     frequency: Trainfrequency
   });
+});
+
+database.ref().on('child_added', function(childSnapshot) {
+  console.log(childSnapshot.val().name);
+  console.log(childSnapshot.val().destination);
+  console.log(childSnapshot.val().time);
+  console.log(childSnapshot.val().frequency);
+
+  let newRow = $('<tr>').append(
+    $('<td>').text(childSnapshot.val().name),
+    $('<td>').text(childSnapshot.val().destination),
+    $('<td>').text(childSnapshot.val().time),
+    $('<td>').text(childSnapshot.val().frequency)
+  );
+
+  $('table > tbody').append(newRow);
 });
